@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FontFamily x:Key="Roboto-Black">pack://application:,,,/Fonts/#Roboto Black</FontFamily>
+    <FontFamily x:Key="Roboto-BlackItalic">pack://application:,,,/Fonts/#Roboto Black Italic</FontFamily>
+    <FontFamily x:Key="Roboto-Bold">pack://application:,,,/Fonts/#Roboto Bold</FontFamily>
+    <FontFamily x:Key="Roboto-BoldItalic">pack://application:,,,/Fonts/#Roboto Bold Italic</FontFamily>
+    <FontFamily x:Key="Roboto-Italic">pack://application:,,,/Fonts/#Roboto Italic</FontFamily>
+    <FontFamily x:Key="Roboto-Light" >pack://application:,,,/Fonts/#Roboto Light</FontFamily>
+    <FontFamily x:Key="Roboto-LightItalic" >pack://application:,,,/Fonts/#Roboto Light Italic</FontFamily>
+    <FontFamily x:Key="Roboto-Medium">pack://application:,,,/Fonts/#Roboto Medium</FontFamily>
+    <FontFamily x:Key="Roboto-MediumItalic">pack://application:,,,/Fonts/f#Roboto Medium Italic</FontFamily>
+    <FontFamily x:Key="Roboto-Regular">pack://application:,,,/Fonts/#Roboto Regular</FontFamily>
+    <FontFamily x:Key="Roboto-Thin">pack://application:,,,/Fonts/#Roboto Thin</FontFamily>
+    <FontFamily x:Key="Roboto-ThinItalic" >pack://application:,,,/Fonts/#Roboto Thin Italic</FontFamily>
+    
+</ResourceDictionary>
