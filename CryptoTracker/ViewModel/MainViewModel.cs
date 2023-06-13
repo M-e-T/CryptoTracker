@@ -41,7 +41,7 @@ namespace CryptoTracker.ViewModel
                         { 
                             var data = await new DataDownloader("https://api.coincap.io/v2/assets").DownloadAsync();
                             MarketCap = JsonConvert.DeserializeObject<Market>(data);
-                            await Task.Delay(5000);
+                            await Task.Delay(500000000);
                         }
                     });
                 }, command => true));

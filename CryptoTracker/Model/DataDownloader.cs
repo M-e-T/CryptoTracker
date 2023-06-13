@@ -15,9 +15,7 @@ namespace CryptoTracker.Model
         {
             using (HttpClient client = new HttpClient())
             {
-
                 HttpResponseMessage response = await client.GetAsync(Url);
-
                 if (response.IsSuccessStatusCode)
                 {
                     return  await response.Content.ReadAsStringAsync();

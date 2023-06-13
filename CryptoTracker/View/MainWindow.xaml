@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptoTracker"
         xmlns:vm="clr-namespace:CryptoTracker.ViewModel" 
+        xmlns:converter="clr-namespace:CryptoTracker.Converters"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450" 
         Width="1000">
-    <Window.CommandBindings>
-     
-    </Window.CommandBindings>
+    <Window.Resources>
+        <converter:NumberShortFormatConverter x:Key="NumberShortFormatConverter" />
+    </Window.Resources>
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -28,14 +29,23 @@
                               CanUserReorderColumns="False"
                               CanUserResizeRows="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" />
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                            <DataGridTextColumn Header="Price" Binding="{Binding PriceUsd}" />
-                            <DataGridTextColumn Header="Supply" Binding="{Binding Supply}" />
-                            <DataGridTextColumn Header="Max Supply" Binding="{Binding MaxSupply}" />
-                            <DataGridTextColumn Header="Market Cap" Binding="{Binding MarketCapUsd}" />
-                            <DataGridTextColumn Header="Volume" Binding="{Binding VolumeUsd24Hr}" />
-                            <DataGridTextColumn Header="Change (%)" Width="*" Binding="{Binding ChangePercent24Hr}" />
+                            <DataGridTextColumn Header="Rank"
+                                                Binding="{Binding Rank}" />
+                            <DataGridTextColumn Header="Name" 
+                                                Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Price" 
+                                                Binding="{Binding PriceUsd, StringFormat={}{0:C}}"/>
+                            <DataGridTextColumn Header="Market Cap" 
+                                                Binding="{Binding MarketCapUsd, StringFormat=${0}, Converter={StaticResource NumberShortFormatConverter}}" />
+                            <DataGridTextColumn Header="VWAP (24Hr)"
+                                                Binding="{Binding VWAP24Hr, StringFormat={}{0:C}}" />
+                            <DataGridTextColumn Header="Supply" 
+                                                Binding="{Binding Supply, Converter={StaticResource NumberShortFormatConverter}}" />
+                            <DataGridTextColumn Header="Volume (24Hr)" 
+                                                Binding="{Binding VolumeUsd24Hr, StringFormat=${0}, Converter={StaticResource NumberShortFormatConverter}}" />
+                            <DataGridTextColumn Header="Change (24Hr)" 
+                                                Binding="{Binding ChangePercent24Hr, StringFormat={}{0:0.00}%}"
+                                                Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
