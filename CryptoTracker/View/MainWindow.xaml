@@ -4,13 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptoTracker"
-        xmlns:vm="clr-namespace:CryptoTracker.ViewModel"
+        xmlns:vm="clr-namespace:CryptoTracker.ViewModel" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450" 
+        Width="1000">
+    <Window.CommandBindings>
+     
+    </Window.CommandBindings>
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
     <Grid>
-    
+        <TabControl>
+            <TabItem Header="Rating coins" 
+                     DataContext="{Binding MarketCap}">
+                <Grid>
+                    <DataGrid ItemsSource="{Binding Cryptocurrencies}" 
+                              IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserReorderColumns="False"
+                              CanUserResizeRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Price" Binding="{Binding PriceUsd}" />
+                            <DataGridTextColumn Header="Supply" Binding="{Binding Supply}" />
+                            <DataGridTextColumn Header="Max Supply" Binding="{Binding MaxSupply}" />
+                            <DataGridTextColumn Header="Market Cap" Binding="{Binding MarketCapUsd}" />
+                            <DataGridTextColumn Header="Volume" Binding="{Binding VolumeUsd24Hr}" />
+                            <DataGridTextColumn Header="Change (%)" Width="*" Binding="{Binding ChangePercent24Hr}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem> 
+        </TabControl>
     </Grid>
 </Window>
