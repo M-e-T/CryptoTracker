@@ -1,7 +1,7 @@
 ﻿
 namespace CryptoTracker.Model
 {
-    public class Cryptocurrency
+    public class CryptoCurrency
     {
         public int Rank { get; set; }
         public string Symbol { get; set; }
@@ -12,6 +12,6 @@ namespace CryptoTracker.Model
         public double VolumeUsd24Hr { get; set; }
         public double PriceUsd { get; set; }
         public double ChangePercent24Hr { get; set; }
-        public double VWAP24Hr { get; set; }
+        public double? VWAP24Hr { get; set; }
     }
 }

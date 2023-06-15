@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:CryptoTracker.ViewModel" 
+                    xmlns:converter="clr-namespace:CryptoTracker.Converters">
+
+    <Style TargetType="ComboBox" BasedOn="{StaticResource baseStyle}">
+        
+    </Style>
+
+    <DataTemplate x:Key="Test">
+        <DockPanel>
+            <Image Source="{Binding Symbol}"
+                   Height="30" 
+                   Width="30"/>
+            <TextBlock Text="{Binding Name}"
+                       DockPanel.Dock="Left" />
+            <TextBlock Text="{Binding Symbol}" 
+                       DockPanel.Dock="Right" 
+                       HorizontalAlignment="Right"/>
+        </DockPanel>
+    </DataTemplate>
+</ResourceDictionary>

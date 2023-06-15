@@ -8,9 +8,5 @@ using System.Threading.Tasks;
 
 namespace CryptoTracker.Model
 {
-    public class Market
-    {
-        [JsonProperty("Data")]
-        public List<CryptoCurrency> CryptoCrrencies { get; set; }
-    }
+  
 }
