@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptoTracker"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         xmlns:vm="clr-namespace:CryptoTracker.ViewModel" 
         xmlns:converter="clr-namespace:CryptoTracker.Converters"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450" 
+        Height="600" 
         Width="1000">
     <Window.Resources>
         <converter:NumberShortFormatConverter x:Key="NumberShortFormatConverter" />
@@ -18,7 +19,7 @@
         <vm:MainViewModel/>
     </Window.DataContext>
     <Grid>
-        <TabControl SelectedIndex="1">
+        <TabControl SelectedIndex="2">
             <TabItem Header="Rating coins" 
                      DataContext="{Binding MarketCap}">
                 <Grid>
@@ -149,6 +150,137 @@
                         <Run Text=" " />
                         <Run Text="{Binding ConvertTo.Name}" />
                     </TextBlock>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Trade">
+                <TabItem.DataContext>
+                    <vm:ChartViewModel/>
+                </TabItem.DataContext>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Time"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
+                                     Command="{Binding SelectChartInterval}" 
+                                     CommandParameter="{x:Static vm:Interval.m1}"
+                                     IsChecked="True"
+                                     Content="m1"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
+                                     Command="{Binding SelectChartInterval}"
+                                     CommandParameter="{x:Static vm:Interval.m5}"
+                                     Content="m5"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartInterval}"
+                                     CommandParameter="{x:Static vm:Interval.m15}"
+                                     Content="m15"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
+                                     Command="{Binding SelectChartInterval}"
+                                     CommandParameter="{x:Static vm:Interval.h1}"
+                                     Content="h1"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartInterval}"
+                                     CommandParameter="{x:Static vm:Interval.h2}"
+                                     Content="h2"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartInterval}"
+                                     CommandParameter="{x:Static vm:Interval.h6}"
+                                     Content="h6"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartInterval}"
+                                     CommandParameter="{x:Static vm:Interval.h12}"
+                                     Content="h12"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartInterval}"
+                                     CommandParameter="{x:Static vm:Interval.d1}"
+                                     Content="d1"/>
+                        <TextBlock Text="{Binding Path=History.Count}"/>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Grid.Row="2">
+                        <TextBlock Text="Scale"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.H1}"
+                                     IsChecked="True"
+                                     Content="1h"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.H6}"
+                                     Content="6h"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.D1}"
+                                     Content="1D"/> 
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.D7}"
+                                     Content="7D"/> 
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.M1}"
+                                     Content="1m"/> 
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.M6}"
+                                     Content="6m"/> 
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.M12}"
+                                     Content="6m"/>
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.Max}"
+                                     Content="1y"/> 
+                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                                     Command="{Binding SelectChartScale}"
+                                     CommandParameter="{x:Static vm:Scale.Max}"
+                                     Content="max"/>
+                    </StackPanel>
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        
+                        Series="{Binding SeriesCollection1}"
+                        XAxes="{Binding SharedXAxis}"
+                        ZoomMode="X" AnimationsSpeed="00:00:0.1000000">   
+                    </lvc:CartesianChart> 
+                    <lvc:CartesianChart
+                        Grid.Row="3"
+                        Series="{Binding SeriesCollection1}"
+                        XAxes="{Binding SharedXAxis1}"
+                        ZoomMode="X">   
+                    </lvc:CartesianChart> 
+                    <lvc:CartesianChart
+                        Grid.Row="4"
+                        Series="{Binding SeriesCollection1}"
+                        XAxes="{Binding SharedXAxis2}"
+                        ZoomMode="X">   
+                    </lvc:CartesianChart>
+                    <lvc:CartesianChart
+                        Grid.Row="5"
+                        Series="{Binding SeriesCollection1}"
+                        XAxes="{Binding SharedXAxis3}"
+                        ZoomMode="X">
+                    </lvc:CartesianChart>
+
+                    <!--
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        Series="{Binding SeriesCollection2}"
+                        XAxes="{Binding SharedXAxis}"
+                        ZoomMode="X">
+                       
+                    </lvc:CartesianChart>
+                    -->
                 </Grid>
             </TabItem>
         </TabControl>
