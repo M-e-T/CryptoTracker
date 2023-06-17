@@ -1,12 +1,4 @@
-﻿using CryptoTracker.Model;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CryptoTracker.Model.Data;
 
 namespace CryptoTracker.ViewModel
 {
@@ -55,7 +47,7 @@ namespace CryptoTracker.ViewModel
                 OnPropertyChanged();
             }
         }
-        private decimal _amount = 0.56m;
+        private decimal _amount;
         public decimal Amount
         {
             get => _amount;

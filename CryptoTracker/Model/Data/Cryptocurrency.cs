@@ -1,5 +1,4 @@
-﻿
-namespace CryptoTracker.Model
+﻿namespace CryptoTracker.Model.Data
 {
     public class CryptoCurrency
     {

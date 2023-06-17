@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptoTracker"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:model="clr-namespace:CryptoTracker.Model" 
         xmlns:vm="clr-namespace:CryptoTracker.ViewModel" 
         xmlns:converter="clr-namespace:CryptoTracker.Converters"
         mc:Ignorable="d"
@@ -160,13 +161,18 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
-                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="50"/>
+                        <!--
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        -->
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal">
+                        <ToggleButton Width="50"
+                                      IsChecked="{Binding Format}"
+                                      Command="{Binding SelectChart}"/>
                         <TextBlock Text="Time"/>
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
                                      Command="{Binding SelectChartInterval}" 
@@ -210,49 +216,51 @@
                         <TextBlock Text="Scale"/>
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.H1}"
+                                     CommandParameter="{x:Static model:Scale.H1}"
                                      IsChecked="True"
                                      Content="1h"/>
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.H6}"
+                                     CommandParameter="{x:Static model:Scale.H6}"
                                      Content="6h"/>
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.D1}"
+                                     CommandParameter="{x:Static model:Scale.D1}"
                                      Content="1D"/> 
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.D7}"
+                                     CommandParameter="{x:Static model:Scale.D7}"
                                      Content="7D"/> 
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.M1}"
+                                     CommandParameter="{x:Static model:Scale.M1}"
                                      Content="1m"/> 
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.M6}"
+                                     CommandParameter="{x:Static model:Scale.M6}"
                                      Content="6m"/> 
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.M12}"
+                                     CommandParameter="{x:Static model:Scale.M12}"
                                      Content="6m"/>
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.Max}"
+                                     CommandParameter="{x:Static model:Scale.Max}"
                                      Content="1y"/> 
                         <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
                                      Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static vm:Scale.Max}"
+                                     CommandParameter="{x:Static model:Scale.Max}"
                                      Content="max"/>
                     </StackPanel>
                     <lvc:CartesianChart
                         Grid.Row="1"
                         
-                        Series="{Binding SeriesCollection1}"
-                        XAxes="{Binding SharedXAxis}"
+                        Series="{Binding Series}"
+                        XAxes="{Binding XAxis}"
                         ZoomMode="X" AnimationsSpeed="00:00:0.1000000">   
-                    </lvc:CartesianChart> 
+                    </lvc:CartesianChart>
+                    <!--
+
                     <lvc:CartesianChart
                         Grid.Row="3"
                         Series="{Binding SeriesCollection1}"
@@ -267,12 +275,12 @@
                     </lvc:CartesianChart>
                     <lvc:CartesianChart
                         Grid.Row="5"
+                        
                         Series="{Binding SeriesCollection1}"
                         XAxes="{Binding SharedXAxis3}"
                         ZoomMode="X">
                     </lvc:CartesianChart>
 
-                    <!--
                     <lvc:CartesianChart
                         Grid.Row="1"
                         Series="{Binding SeriesCollection2}"

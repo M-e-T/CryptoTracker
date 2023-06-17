@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace CryptoTracker.Model
+namespace CryptoTracker.Command
 {
     public class RelayCommand : ICommand
     {
@@ -20,11 +20,11 @@ namespace CryptoTracker.Model
         }
         public bool CanExecute(object parameter)
         {
-            return this.canExecute == null || this.canExecute(parameter);
+            return canExecute == null || canExecute(parameter);
         }
         public void Execute(object parameter)
         {
-            this.execute(parameter);
+            execute(parameter);
         }
     }
 }

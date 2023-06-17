@@ -27,5 +27,14 @@ namespace CryptoTracker.Model
                 //throw new Exception($"An error occurred: {ex.Message}");
             }
         }
+        public string Download()
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, Url);
+            var response = client.Send(request);
+            response.EnsureSuccessStatusCode();
+            var jsonString = response.Content.ReadAsStringAsync().Result.ToString();
+            return jsonString;
+        }
     }
 }

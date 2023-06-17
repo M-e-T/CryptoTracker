@@ -1,29 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Diagnostics;
-using System.Net.Http;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
-using Newtonsoft.Json;
 using CryptoTracker.Model;
-using Newtonsoft.Json.Linq;
-using System.Windows.Controls;
+using CryptoTracker.Model.Data;
+using CryptoTracker.Command;
+using CryptoTracker.Api;
 
 namespace CryptoTracker.ViewModel
 {
-    public class Rates
-    {
-        public string Id { get; set; }
-        public string Symbol { get; set; }
-        public string CurrencySymbol { get; set; }
-        public string Type { get; set; }
-        public double RateUsd { get; set; }
-    }
     public class MainViewModel : BaseViewModel
     {  
         private Market _marketCap;
@@ -55,28 +40,17 @@ namespace CryptoTracker.ViewModel
         {
             get
             {
-                return _updateMarket ?? (_updateMarket = new RelayCommand(async command =>
+                return _updateMarket ?? (_updateMarket = new RelayCommand(command =>
                 {
-                    var client = new HttpClient();
-                    var request = new HttpRequestMessage(HttpMethod.Get, "https://api.coincap.io/v2/rates");
-                    var response = client.Send(request);
-                    response.EnsureSuccessStatusCode();
-                    var jsonString = response.Content.ReadAsStringAsync().Result.ToString();
-                    
-                    JObject jsonObject = JObject.Parse(jsonString);
-                    JArray dataArray = (JArray)jsonObject["data"];
-                    Rates = dataArray.ToObject<ObservableCollection<Rates>>();
+                    var jsonString = new DataDownloader(new CoincapRequest().RatesRequest).Download();
+                    Rates = new DataParser().PrseJson<ObservableCollection<Rates>>(jsonString);
 
-                    Console.WriteLine();
-                    //List<Rates> currencyItems = JsonConvert.DeserializeObject<Rates>(data);
-                    //Rates = new ObservableCollection<Rates>(JsonConvert.DeserializeObject<List<Rates>>(data));
-
-                    await Task.Run(async() =>
+                    Task.Run(async() =>
                     {
                         while (true) 
-                        { 
-                            var data = await new DataDownloader("https://api.coincap.io/v2/assets").DownloadAsync();
-                            MarketCap = JsonConvert.DeserializeObject<Market>(data);
+                        {
+                            var jsonString = new DataDownloader(new CoincapRequest().AssetsRequest).Download();
+                            MarketCap = new DataParser().PrseJson<Market>(jsonString);
                             await Task.Delay(500000000);
                         }
                     });
