@@ -19,7 +19,7 @@ namespace CryptoTracker.Commands
             {
                 RemoveTheme(_currentTheme);
                 ResourceDictionary newTheme;
-                if (isChecked == true)
+                if (isChecked == false)
                 {
                     newTheme = new ResourceDictionary
                     {

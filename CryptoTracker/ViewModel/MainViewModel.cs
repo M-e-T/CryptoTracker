@@ -6,37 +6,10 @@ using CryptoTracker.Model;
 using CryptoTracker.Model.Data;
 using CryptoTracker.Command;
 using CryptoTracker.Api;
+using CryptoTracker.Model.Locator;
 
 namespace CryptoTracker.ViewModel
 {
-    public class ViewModelLocator
-    {
-        private static MainViewModel _mainViewModel;
-        private static ChartViewModel _chartViewModel;
-
-        public static MainViewModel MainViewModel
-        {
-            get
-            {
-                if (_mainViewModel == null)
-                    _mainViewModel = new MainViewModel();
-
-                return _mainViewModel;
-            }
-        }
-
-        public static ChartViewModel ChartViewModel
-        {
-            get
-            {
-                if (_chartViewModel == null)
-                    _chartViewModel = new ChartViewModel();
-
-                return _chartViewModel;
-            }
-        }
-    }
-
     public class MainViewModel : BaseViewModel
     {  
         private Market _marketCap;
@@ -65,12 +38,16 @@ namespace CryptoTracker.ViewModel
             get => _selectedCoin;
             set
             {
+                if(_selectedCoin == null)
+                {
+                    _selectedCoin = value;
+                    OnPropertyChanged();
+                    return;
+                }
                 _selectedCoin = value;
-                OnPropertyChanged();
-
                 var chartViewModel = ViewModelLocator.ChartViewModel;
                 chartViewModel.SelectedCoin = value;
-                // Step 3: Assign the value to ChartViewModel's property
+                TabIndex = 2;
             }
         }
         private int _tabIndex;
@@ -99,12 +76,10 @@ namespace CryptoTracker.ViewModel
 
                     Task.Run(async() =>
                     {
-                        while (true) 
-                        {
-                            var jsonString = new DataDownloader(new CoincapRequest().AssetsRequest).Download();
-                            MarketCap = new DataParser().PrseJson<Market>(jsonString);
-                            await Task.Delay(500000000);
-                        }
+                        var jsonString = new DataDownloader(new CoincapRequest().AssetsRequest).Download();
+                        MarketCap = new DataParser().PrseJson<Market>(jsonString);
+                        SelectedCoin = MarketCap.CryptoCrrencies[0];
+                        
                     });
                 }, command => true));
             }

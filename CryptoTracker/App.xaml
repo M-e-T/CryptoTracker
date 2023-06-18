@@ -8,9 +8,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Font.xaml"/>
                 <!--
-                <ResourceDictionary Source="Styles/LightTheme.xaml" />
-                -->
                 <ResourceDictionary Source="Styles/DarkTheme.xaml" />
+                -->
+                <ResourceDictionary Source="Styles/LightTheme.xaml" />
                 
                 <ResourceDictionary Source="Styles/Icons/Icons.xaml"/>
 

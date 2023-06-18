@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="PrimaryBrush">#d9d9da</SolidColorBrush>
-    <SolidColorBrush x:Key="PrimaryHoverBrush">#9DB2BF</SolidColorBrush>
-    <SolidColorBrush x:Key="PrimaryActiveBrush">#d9d9da</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryHoverBrush">#d9d9da</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryActiveBrush">#ececec</SolidColorBrush>
 
     <SolidColorBrush x:Key="SecondaryBrush">#e3e4e3</SolidColorBrush>
     <SolidColorBrush x:Key="SecondaryHoverBrush">#dadddb</SolidColorBrush>

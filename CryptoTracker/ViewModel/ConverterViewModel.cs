@@ -21,7 +21,7 @@ namespace CryptoTracker.ViewModel
             get => _convertTo;
             set
             {
-                _convertTo = value;
+                    _convertTo = value;
                 Converter();
                 OnPropertyChanged();
             }

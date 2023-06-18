@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using CryptoTracker.ViewModel;
+using CryptoTracker.Model.Locator;
 
 namespace CryptoTracker
 {

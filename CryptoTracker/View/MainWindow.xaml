@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:CryptoTracker"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" 
+        xmlns:locator="clr-namespace:CryptoTracker.Model.Locator"
         xmlns:model="clr-namespace:CryptoTracker.Model" 
         xmlns:vm="clr-namespace:CryptoTracker.ViewModel" 
         xmlns:converter="clr-namespace:CryptoTracker.Converters"
@@ -15,15 +17,16 @@
         Height="700" 
         Width="1000"
         Background="{DynamicResource BackgroundBrush}"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+>
     <Window.Resources>
+        <locator:ViewModelLocator x:Key="ViewModelLocator"/>
         <converter:NumberShortFormatConverter x:Key="NumberShortFormatConverter" />
         <converter:SymbolToImageUrlConverter x:Key="SymbolToImageUrlConverter" />
         <converter:BoolToParameterConverter x:Key="BoolToParameterConverter" />
-        <!--
         <command:SelectThameCommand x:Key="SelectThameCommand"/>
+        <!--
         -->
-        
+
         <!--
         <Style x:Key="TabButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
@@ -85,7 +88,7 @@
             </Setter>
         </Style>
         -->
-        
+
         <Style TargetType="TabControl">
             <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource BackgroundBrush}"/>
@@ -94,20 +97,6 @@
             <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
         </Style>
 
-        <!--
-        <SolidColorBrush x:Key="PrimaryBrush">#282b30</SolidColorBrush>
-        <SolidColorBrush x:Key="HoverBrush">#36393e</SolidColorBrush>
-        <SolidColorBrush x:Key="ActiveBrush">#AFD3E2</SolidColorBrush>
-        <SolidColorBrush x:Key="SecondaryBrush">#424549</SolidColorBrush>
-        <SolidColorBrush x:Key="SecondaryHoverBrush">#676a6d</SolidColorBrush>
-        <SolidColorBrush x:Key="SecondaryActiveBrush">#c2c4c3</SolidColorBrush>
-
-        <SolidColorBrush x:Key="ForegroundBrush">#AFD3E2</SolidColorBrush>
-        <SolidColorBrush x:Key="AccentBrush">#F6F1F1</SolidColorBrush>
-
-        <SolidColorBrush x:Key="PrimaryForegroundBrush">White</SolidColorBrush>
-        <SolidColorBrush x:Key="BackgroundBrush">#36393e</SolidColorBrush>
-        -->
     </Window.Resources>
     <Window.DataContext>
         <vm:MainViewModel />
@@ -133,7 +122,7 @@
                               CanUserResizeRows="False"
                               CanUserResizeColumns="False"
                               ColumnWidth="auto">
-                    <DataGrid.Columns>
+                        <DataGrid.Columns>
                             <DataGridTextColumn Header="Rank"
                                                 Binding="{Binding Rank}" 
                                                 Width="60">
@@ -210,25 +199,6 @@
                                   SelectedItem="{Binding ConvertTo}"
                                   SelectedIndex="1"
                                   HorizontalContentAlignment="Stretch">
-                            <ComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel IsVirtualizing="True" />
-                                </ItemsPanelTemplate>
-                            </ComboBox.ItemsPanel>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel>
-                                        <Image Source="{Binding Symbol, Converter={StaticResource SymbolToImageUrlConverter}}"
-                                               Height="30" 
-                                               Width="30"/>
-                                        <TextBlock Text="{Binding Name}"
-                                                   DockPanel.Dock="Left" />
-                                        <TextBlock Text="{Binding Symbol}"    
-                                                   DockPanel.Dock="Right" 
-                                                   HorizontalAlignment="Right"/>
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
                         </ComboBox>
                         <TextBox Height="50" 
                                  Text="{Binding RightNumber, UpdateSourceTrigger=PropertyChanged}"/>
@@ -248,7 +218,7 @@
 
             <TabItem Header="Trade">
                 <TabItem.DataContext>
-                    <vm:ChartViewModel/>
+                    <Binding Source="{StaticResource ViewModelLocator}" Path="ChartViewModel" />
                 </TabItem.DataContext>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -319,8 +289,15 @@
                  CommandParameter="{x:Static vm:Interval.d1}"
                  Content="1d" />
                     </Grid>
-
-                    <Grid Grid.Row="2" Width="450">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="30" Width="30" 
+                               Source="{Binding SelectedCoin.Symbol, Converter={StaticResource SymbolToImageUrlConverter}}">
+                        </Image>
+                        <TextBlock Text="{Binding SelectedCoin.Name}"/>
+                        <TextBlock Text="{Binding SelectedCoin.Symbol}"/>
+                    </StackPanel>
+                    <Grid Grid.Row="2" Width="450" 
+                          Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
@@ -338,7 +315,7 @@
                                    Foreground="{DynamicResource PrimaryForegroundBrush}"/>
 
                         <RadioButton Grid.Column="1"
-                 Style="{StaticResource {x:Type ToggleButton}}"
+                                     Style="{StaticResource {x:Type ToggleButton}}"
                  Command="{Binding SelectChartScale}"
                  CommandParameter="{x:Static model:Scale.H1}"
                  IsChecked="True"
@@ -384,14 +361,14 @@
                  CommandParameter="{x:Static model:Scale.Max}"
                  Content="max" />
                     </Grid>
-
                     <lvc:CartesianChart
                         Grid.Row="1"
-                        Foreground="{DynamicResource BackgroundBrush}"
-                        Series="{Binding Series}"
-                        XAxes="{Binding XAxis}"
+
+                        Series="{Binding Series }"
+                        XAxes="{Binding SharedXAxis}"
                         ZoomMode="X" AnimationsSpeed="00:00:0.1000000">
                     </lvc:CartesianChart>
+
                 </Grid>
             </TabItem>
         </TabControl>
@@ -399,11 +376,11 @@
                     HorizontalAlignment="Right"
                     Margin="5">
             <!-- 
-                          Command="{StaticResource SelectThameCommand}"
             -->
             <ToggleButton Width="30" 
                           Height="30"
                           IsChecked="True"
+                          Command="{StaticResource SelectThameCommand}"
                           CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToParameterConverter}}">
                 <ToggleButton.Template >
                     <ControlTemplate TargetType="ToggleButton">
@@ -429,7 +406,7 @@
                                 <Setter TargetName="Viewbox" Property="Margin" Value="-2.5,-2,0,0"/>
                                 <Setter TargetName="Viewbox" Property="Height" Value="25"/>
                                 <Setter TargetName="Viewbox" Property="Width" Value="25"/>
-                            </Trigger> 
+                            </Trigger>
                             <Trigger Property="IsChecked" Value="False">
                                 <Setter TargetName="ContentControl" Property="Content">
                                     <Setter.Value>
@@ -453,7 +430,7 @@
 
                 </ToggleButton.Template>
             </ToggleButton>
-        
+
         </StackPanel>
     </Grid>
 </Window>

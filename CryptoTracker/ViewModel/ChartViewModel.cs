@@ -20,6 +20,8 @@ using CryptoTracker.Model.Charts;
 using CryptoTracker.Model.Data;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Documents;
+using System.Collections.Generic;
 
 namespace CryptoTracker.ViewModel
 {
@@ -61,6 +63,7 @@ namespace CryptoTracker.ViewModel
             {
                 _selectedCoin = value;
                 OnPropertyChanged();
+                UpdateChart();
             }
         }
 
@@ -122,13 +125,13 @@ namespace CryptoTracker.ViewModel
                 OnPropertyChanged();
             }
         }
-        private Axis[] _xAxis;
-        public Axis[] XAxis
+        private Axis[] _sharedXAxis;
+        public Axis[] SharedXAxis
         {
-            get => _xAxis;
+            get => _sharedXAxis;
             set
             {
-                XAxis = value;
+                _sharedXAxis = value;
                 OnPropertyChanged();
             }
         }
@@ -145,22 +148,63 @@ namespace CryptoTracker.ViewModel
 
         public ChartViewModel()
         {
-            UpdateChart(); 
+
         }
         public void UpdateChart()
         {
-            var jsonString = new DataDownloader(new CoincapRequest().HistoryRequest(ChartInterval)).Download();
+            string jsonString;
+            if (SelectedCoin is null)
+                return;
+            jsonString = new DataDownloader(new CoincapRequest().HistoryRequest(SelectedCoin.Name.ToLower(), ChartInterval)).Download();
             History = new DataParser().PrseJson<ObservableCollection<History>>(jsonString);        
            
             if (ChartScale != Scale.Max)
                 History = new ObservableCollection<History>(History.Where(x => x.Date > TimeScale.GetPeriod(ChartScale)));;
 
+            List<string> labels = new List<string>();
+            long unitWidth = 0;
+            if (ChartInterval == Interval.m1 || ChartInterval == Interval.m5 ||
+                ChartInterval == Interval.m15 || ChartInterval == Interval.m30)
+            {
+                unitWidth = TimeSpan.FromMinutes(1).Ticks;
+            }
+            else if (ChartInterval == Interval.h1)
+            {
+                unitWidth = TimeSpan.FromHours(1).Ticks;
+            }
+            else if (ChartInterval == Interval.d1)
+            {
+                unitWidth = TimeSpan.FromDays(1).Ticks;
+            }
             Series = new ISeries[] { new LineSeries<double> {
                 Values = History.Select(x => x.PriceUsd),
-                Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 2 },
+                Stroke = new SolidColorPaint(SKColors.DarkBlue) { StrokeThickness = 0 },
                 LineSmoothness = 0,
                 GeometrySize = 1,
-            } };  
+            } };
+
+            
+            /*if(ChartInterval == Interval.m5 || ChartInterval == Interval.m15 || ChartInterval == Interval.m30)
+            {
+
+            }
+            else if(ChartInterval == Interval.h1 || ChartInterval == Interval.h2 || ChartInterval == Interval.)
+            {
+
+            }
+            else*/
+            if (ChartScale ==  Scale.H1)
+                labels = History.Select(x => x.Date.ToString("HH:mm:ss")).ToList();   
+            else if (ChartScale ==  Scale.D1)
+                labels = History.Select(x => x.Date.ToString("dd/MM")).ToList();  
+            else
+                labels = History.Select(x => x.Date.ToString("MM/yyyy")).ToList();
+            SharedXAxis = new Axis[] { new Axis()
+            {
+                Labels = labels,
+            }};
+            
+          
 
             /*
             long unitWidth = 0;
@@ -177,7 +221,7 @@ namespace CryptoTracker.ViewModel
             {
                 unitWidth = TimeSpan.FromDays(1).Ticks;
             }*/
-              
+
 
         }
         private ICommand _selectChart;

@@ -12,9 +12,9 @@ namespace CryptoTracker.Api
     {
         public string RatesRequest { get => "https://api.coincap.io/v2/rates"; }
         public string AssetsRequest { get => "https://api.coincap.io/v2/assets"; }
-        public string HistoryRequest(Interval interval)
+        public string HistoryRequest(string currency, Interval interval)
         {
-            return $"https://api.coincap.io/v2/assets/bitcoin/history?interval={interval}";
+            return $"https://api.coincap.io/v2/assets/{currency}/history?interval={interval}";
         }
     }
 }
