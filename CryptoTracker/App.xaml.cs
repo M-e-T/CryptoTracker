@@ -13,5 +13,6 @@ namespace CryptoTracker
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

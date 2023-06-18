@@ -5,43 +5,153 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptoTracker"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:model="clr-namespace:CryptoTracker.Model" 
         xmlns:vm="clr-namespace:CryptoTracker.ViewModel" 
         xmlns:converter="clr-namespace:CryptoTracker.Converters"
+        xmlns:command="clr-namespace:CryptoTracker.Commands"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="600" 
-        Width="1000">
+        Height="700" 
+        Width="1000"
+        Background="{DynamicResource BackgroundBrush}"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <Window.Resources>
         <converter:NumberShortFormatConverter x:Key="NumberShortFormatConverter" />
         <converter:SymbolToImageUrlConverter x:Key="SymbolToImageUrlConverter" />
+        <converter:BoolToParameterConverter x:Key="BoolToParameterConverter" />
+        <!--
+        <command:SelectThameCommand x:Key="SelectThameCommand"/>
+        -->
+        
+        <!--
+        <Style x:Key="TabButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,5"/>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BackgroundBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Grid Name="Panel">
+                            <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="{DynamicResource ActiveBrush }" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Panel" Property="Background" Value="{DynamicResource SecondaryBrush }" />
+                            </Trigger>  
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="{DynamicResource HoverBrush }" />
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>  
+         -->
+
+        <!--
+      
+
+        <Style TargetType="{x:Type TabControl}" x:Key="Tab1">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Background="LightGray">
+                                <ItemsPresenter Margin="2,0"/>
+                            </StackPanel>
+                            <ContentPresenter Grid.Row="1"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        -->
+        
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BackgroundBrush}"/>
+        </Style>
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+        </Style>
+
+        <!--
+        <SolidColorBrush x:Key="PrimaryBrush">#282b30</SolidColorBrush>
+        <SolidColorBrush x:Key="HoverBrush">#36393e</SolidColorBrush>
+        <SolidColorBrush x:Key="ActiveBrush">#AFD3E2</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryBrush">#424549</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryHoverBrush">#676a6d</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryActiveBrush">#c2c4c3</SolidColorBrush>
+
+        <SolidColorBrush x:Key="ForegroundBrush">#AFD3E2</SolidColorBrush>
+        <SolidColorBrush x:Key="AccentBrush">#F6F1F1</SolidColorBrush>
+
+        <SolidColorBrush x:Key="PrimaryForegroundBrush">White</SolidColorBrush>
+        <SolidColorBrush x:Key="BackgroundBrush">#36393e</SolidColorBrush>
+        -->
     </Window.Resources>
     <Window.DataContext>
-        <vm:MainViewModel/>
+        <vm:MainViewModel />
     </Window.DataContext>
     <Grid>
-        <TabControl SelectedIndex="2">
-            <TabItem Header="Rating coins" 
-                     DataContext="{Binding MarketCap}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TabControl SelectedIndex="{Binding Path=TabIndex}" 
+                    Grid.RowSpan="2"
+                    Margin="5">
+            <TabItem Header="Rating coins">
                 <Grid>
-                    <DataGrid ItemsSource="{Binding CryptoCrrencies}" 
+                    <DataGrid ItemsSource="{Binding  MarketCap.CryptoCrrencies}" 
+                              SelectedItem="{Binding SelectedCoin}"
+                              SelectionMode="Single"
                               IsReadOnly="True"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               CanUserReorderColumns="False"
-                              CanUserResizeRows="False">
-                        <DataGrid.Columns>
+                              CanUserResizeRows="False"
+                              CanUserResizeColumns="False"
+                              ColumnWidth="auto">
+                    <DataGrid.Columns>
                             <DataGridTextColumn Header="Rank"
-                                                Binding="{Binding Rank}" />
-                            <DataGridTemplateColumn Header="Name">
+                                                Binding="{Binding Rank}" 
+                                                Width="60">
+                                <DataGridTextColumn.EditingElementStyle>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                    </Style>
+                                </DataGridTextColumn.EditingElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Name" Width="Auto" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Height="30" Width="30" 
                                                    Source="{Binding Symbol, Converter={StaticResource SymbolToImageUrlConverter}}">
                                             </Image>
-                                            <TextBlock Text="{Binding Name}" />
+                                            <TextBlock Text="{Binding Name}" 
+                                                       Width="150" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -51,14 +161,14 @@
                             <DataGridTextColumn Header="Market Cap" 
                                                 Binding="{Binding MarketCapUsd, StringFormat=${0}, Converter={StaticResource NumberShortFormatConverter}}" />
                             <DataGridTextColumn Header="VWAP (24Hr)"
-                                                Binding="{Binding VWAP24Hr, StringFormat={}{0:C}}" />
+                                                Binding="{Binding VWAP24Hr, StringFormat={}{0:C}}"/>
                             <DataGridTextColumn Header="Supply" 
-                                                Binding="{Binding Supply, Converter={StaticResource NumberShortFormatConverter}}" />
+                                                Binding="{Binding Supply, Converter={StaticResource NumberShortFormatConverter}}"/>
                             <DataGridTextColumn Header="Volume (24Hr)" 
                                                 Binding="{Binding VolumeUsd24Hr, StringFormat=${0}, Converter={StaticResource NumberShortFormatConverter}}" />
                             <DataGridTextColumn Header="Change (24Hr)" 
                                                 Binding="{Binding ChangePercent24Hr, StringFormat={}{0:0.00}%}"
-                                                Width="*" />
+                                                Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -90,24 +200,6 @@
                                   SelectedItem="{Binding ConvertFrom}"
                                   HorizontalContentAlignment="Stretch"
                                   SelectedIndex="0">
-                            <ComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel IsVirtualizing="True" />
-                                </ItemsPanelTemplate>
-                            </ComboBox.ItemsPanel>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel>
-                                        <Image Source="{Binding Symbol, Converter={StaticResource SymbolToImageUrlConverter}}"
-                                               Height="30" 
-                                               Width="30"/>
-                                        <TextBlock Text="{Binding Name}" DockPanel.Dock="Left" />
-                                        <TextBlock Text="{Binding Symbol}"    
-                                                   DockPanel.Dock="Right" 
-                                                   HorizontalAlignment="Right"/>
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
                         </ComboBox>
                         <TextBox Height="50" 
                             Text="{Binding LeftNumber, UpdateSourceTrigger=PropertyChanged}"/>
@@ -169,128 +261,199 @@
                         <RowDefinition Height="*"/>
                         -->
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal">
-                        <ToggleButton Width="50"
-                                      IsChecked="{Binding Format}"
-                                      Command="{Binding SelectChart}"/>
-                        <TextBlock Text="Time"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
-                                     Command="{Binding SelectChartInterval}" 
-                                     CommandParameter="{x:Static vm:Interval.m1}"
-                                     IsChecked="True"
-                                     Content="m1"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
-                                     Command="{Binding SelectChartInterval}"
-                                     CommandParameter="{x:Static vm:Interval.m5}"
-                                     Content="m5"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartInterval}"
-                                     CommandParameter="{x:Static vm:Interval.m15}"
-                                     Content="m15"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
-                                     Command="{Binding SelectChartInterval}"
-                                     CommandParameter="{x:Static vm:Interval.h1}"
-                                     Content="h1"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartInterval}"
-                                     CommandParameter="{x:Static vm:Interval.h2}"
-                                     Content="h2"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartInterval}"
-                                     CommandParameter="{x:Static vm:Interval.h6}"
-                                     Content="h6"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartInterval}"
-                                     CommandParameter="{x:Static vm:Interval.h12}"
-                                     Content="h12"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartInterval}"
-                                     CommandParameter="{x:Static vm:Interval.d1}"
-                                     Content="d1"/>
-                        <TextBlock Text="{Binding Path=History.Count}"/>
+                    <Grid Margin="5" 
+                          Width="450"
+                          HorizontalAlignment="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Interval"
+                                   Foreground="{DynamicResource PrimaryForegroundBrush}"/>
+                        <RadioButton Grid.Column="1"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.m1}"
+                 IsChecked="True"
+                 Content="1m" />
+                        <RadioButton Grid.Column="2"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.m5}"
+                 Content="5m" />
+                        <RadioButton Grid.Column="3"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.m15}"
+                 Content="15m" />
+                        <RadioButton Grid.Column="4"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.h1}"
+                 Content="1h" />
+                        <RadioButton Grid.Column="5"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.h2}"
+                 Content="2h" />
+                        <RadioButton Grid.Column="6"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.h6}"
+                 Content="6h" />
+                        <RadioButton Grid.Column="7"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.h12}"
+                 Content="12h" />
+                        <RadioButton Grid.Column="8"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartInterval}"
+                 CommandParameter="{x:Static vm:Interval.d1}"
+                 Content="1d" />
+                    </Grid>
 
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                Grid.Row="2">
-                        <TextBlock Text="Scale"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.H1}"
-                                     IsChecked="True"
-                                     Content="1h"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.H6}"
-                                     Content="6h"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.D1}"
-                                     Content="1D"/> 
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.D7}"
-                                     Content="7D"/> 
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.M1}"
-                                     Content="1m"/> 
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.M6}"
-                                     Content="6m"/> 
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.M12}"
-                                     Content="6m"/>
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.Max}"
-                                     Content="1y"/> 
-                        <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
-                                     Command="{Binding SelectChartScale}"
-                                     CommandParameter="{x:Static model:Scale.Max}"
-                                     Content="max"/>
-                    </StackPanel>
+                    <Grid Grid.Row="2" Width="450">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Scale" 
+                                   Foreground="{DynamicResource PrimaryForegroundBrush}"/>
+
+                        <RadioButton Grid.Column="1"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.H1}"
+                 IsChecked="True"
+                 Content="1h" />
+                        <RadioButton Grid.Column="2"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.H6}"
+                 Content="6h" />
+                        <RadioButton Grid.Column="3"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.D1}"
+                 Content="1D" />
+                        <RadioButton Grid.Column="4"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.D7}"
+                 Content="7D" />
+                        <RadioButton Grid.Column="5"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.M1}"
+                 Content="1m" />
+                        <RadioButton Grid.Column="6"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.M6}"
+                 Content="6m" />
+                        <RadioButton Grid.Column="7"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.M12}"
+                 Content="12m" />
+                        <RadioButton Grid.Column="8"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.Max}"
+                 Content="1y" />
+                        <RadioButton Grid.Column="9"
+                 Style="{StaticResource {x:Type ToggleButton}}"
+                 Command="{Binding SelectChartScale}"
+                 CommandParameter="{x:Static model:Scale.Max}"
+                 Content="max" />
+                    </Grid>
+
                     <lvc:CartesianChart
                         Grid.Row="1"
-                        
+                        Foreground="{DynamicResource BackgroundBrush}"
                         Series="{Binding Series}"
                         XAxes="{Binding XAxis}"
-                        ZoomMode="X" AnimationsSpeed="00:00:0.1000000">   
+                        ZoomMode="X" AnimationsSpeed="00:00:0.1000000">
                     </lvc:CartesianChart>
-                    <!--
-
-                    <lvc:CartesianChart
-                        Grid.Row="3"
-                        Series="{Binding SeriesCollection1}"
-                        XAxes="{Binding SharedXAxis1}"
-                        ZoomMode="X">   
-                    </lvc:CartesianChart> 
-                    <lvc:CartesianChart
-                        Grid.Row="4"
-                        Series="{Binding SeriesCollection1}"
-                        XAxes="{Binding SharedXAxis2}"
-                        ZoomMode="X">   
-                    </lvc:CartesianChart>
-                    <lvc:CartesianChart
-                        Grid.Row="5"
-                        
-                        Series="{Binding SeriesCollection1}"
-                        XAxes="{Binding SharedXAxis3}"
-                        ZoomMode="X">
-                    </lvc:CartesianChart>
-
-                    <lvc:CartesianChart
-                        Grid.Row="1"
-                        Series="{Binding SeriesCollection2}"
-                        XAxes="{Binding SharedXAxis}"
-                        ZoomMode="X">
-                       
-                    </lvc:CartesianChart>
-                    -->
                 </Grid>
             </TabItem>
         </TabControl>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="5">
+            <!-- 
+                          Command="{StaticResource SelectThameCommand}"
+            -->
+            <ToggleButton Width="30" 
+                          Height="30"
+                          IsChecked="True"
+                          CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToParameterConverter}}">
+                <ToggleButton.Template >
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Ellipse x:Name="Elipse" 
+                                     StrokeThickness="0"  />
+                            <Viewbox x:Name="Viewbox"
+                                Height="30"
+                                Width="30"
+                                Margin="-10,-8,0,0">
+                                <ContentControl x:Name="ContentControl"  />
+                            </Viewbox>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="ContentControl" Property="Content">
+                                    <Setter.Value>
+                                        <Viewbox>
+                                            <ContentControl Content="{DynamicResource MoonIcon}" />
+                                        </Viewbox>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="Viewbox" Property="Margin" Value="-2.5,-2,0,0"/>
+                                <Setter TargetName="Viewbox" Property="Height" Value="25"/>
+                                <Setter TargetName="Viewbox" Property="Width" Value="25"/>
+                            </Trigger> 
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="ContentControl" Property="Content">
+                                    <Setter.Value>
+                                        <Viewbox>
+                                            <ContentControl Content="{DynamicResource SunIcon}" />
+                                        </Viewbox>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="Viewbox" Property="Margin" Value="-2.5,-2,0,0"/>
+                                <Setter TargetName="Viewbox" Property="Height" Value="25"/>
+                                <Setter TargetName="Viewbox" Property="Width" Value="25"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Fill" TargetName="Elipse" Value="{DynamicResource ForegroundBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Fill" TargetName="Elipse" Value="{DynamicResource SecondaryBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+
+                </ToggleButton.Template>
+            </ToggleButton>
+        
+        </StackPanel>
     </Grid>
 </Window>

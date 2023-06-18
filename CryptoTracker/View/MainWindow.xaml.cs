@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using CryptoTracker.ViewModel;
 
 namespace CryptoTracker
 {
@@ -10,6 +11,7 @@ namespace CryptoTracker
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = ViewModelLocator.MainViewModel;
         }
     }
 }

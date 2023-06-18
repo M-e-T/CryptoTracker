@@ -17,6 +17,9 @@ using CryptoTracker.Model;
 using CryptoTracker.Command;
 using CryptoTracker.Api;
 using CryptoTracker.Model.Charts;
+using CryptoTracker.Model.Data;
+using System.Windows.Media;
+using System.Windows;
 
 namespace CryptoTracker.ViewModel
 {
@@ -39,6 +42,28 @@ namespace CryptoTracker.ViewModel
     }
     public class ChartViewModel : BaseViewModel
     {
+        private Brush _primaryForegroundBrush;
+        public Brush PrimaryForegroundBrush
+        {
+            get { return _primaryForegroundBrush; }
+            set
+            {
+                _primaryForegroundBrush = value;
+                OnPropertyChanged(nameof(PrimaryForegroundBrush));
+            }
+        }
+
+        private CryptoCurrency _selectedCoin;
+        public CryptoCurrency SelectedCoin
+        {
+            get => _selectedCoin;
+            set
+            {
+                _selectedCoin = value;
+                OnPropertyChanged();
+            }
+        }
+
         private ObservableCollection<History> _history;
         public ObservableCollection<History> History
         {
@@ -117,9 +142,10 @@ namespace CryptoTracker.ViewModel
                 OnPropertyChanged();
             }
         }
+
         public ChartViewModel()
         {
-            UpdateChart();
+            UpdateChart(); 
         }
         public void UpdateChart()
         {

@@ -9,6 +9,34 @@ using CryptoTracker.Api;
 
 namespace CryptoTracker.ViewModel
 {
+    public class ViewModelLocator
+    {
+        private static MainViewModel _mainViewModel;
+        private static ChartViewModel _chartViewModel;
+
+        public static MainViewModel MainViewModel
+        {
+            get
+            {
+                if (_mainViewModel == null)
+                    _mainViewModel = new MainViewModel();
+
+                return _mainViewModel;
+            }
+        }
+
+        public static ChartViewModel ChartViewModel
+        {
+            get
+            {
+                if (_chartViewModel == null)
+                    _chartViewModel = new ChartViewModel();
+
+                return _chartViewModel;
+            }
+        }
+    }
+
     public class MainViewModel : BaseViewModel
     {  
         private Market _marketCap;
@@ -28,6 +56,30 @@ namespace CryptoTracker.ViewModel
             set
             {
                 _rates = value;
+                OnPropertyChanged();
+            }
+        }
+        private CryptoCurrency _selectedCoin;
+        public CryptoCurrency SelectedCoin
+        {
+            get => _selectedCoin;
+            set
+            {
+                _selectedCoin = value;
+                OnPropertyChanged();
+
+                var chartViewModel = ViewModelLocator.ChartViewModel;
+                chartViewModel.SelectedCoin = value;
+                // Step 3: Assign the value to ChartViewModel's property
+            }
+        }
+        private int _tabIndex;
+        public int TabIndex
+        {
+            get => _tabIndex;
+            set
+            {
+                _tabIndex = value;
                 OnPropertyChanged();
             }
         }
